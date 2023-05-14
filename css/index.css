@@ -1,0 +1,77 @@
+html, body{
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, ol, ul, li, a, p{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 14px;
+    list-style: none;
+    color: #000000;
+    text-decoration: none;
+}
+
+/*.....................................*/
+
+.area{
+    background-color: #eee;
+    height: 600px;
+    position: relative;
+}
+
+.area .box{
+    height: 200px;
+    width: 200px;
+    background-color: #bbbbbb2d;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.area .box img{
+    float: right;
+    width: 13px;
+    padding: 5px;
+}
+
+.area .box textarea{
+    margin: auto;
+    padding: 5px;
+    border-style: none;
+    display: block;
+    width: 190px;
+    resize: none;
+    overflow: hidden;
+}
+
+.area .box .title{
+    font-size: 20px;
+    margin-bottom: 10px;
+
+}
+
+.area .box .message{
+    font-size: 17px;
+}
+
+.btn{
+    height: 40px;
+    width: 40px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #000;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 30px;
+    border-radius: 100%;
+}
