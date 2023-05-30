@@ -45,17 +45,12 @@ h1, h2, h3, h4, h5, h6, ol, ul, li, a, p{
     border-style: none;
     display: block;
     width: 190px;
+    height: 130px;
     resize: none;
     overflow: hidden;
 }
 
-.area .box .title{
-    font-size: 20px;
-    margin-bottom: 10px;
-
-}
-
-.area .box .message{
+.area .box .note{
     font-size: 17px;
 }
 
@@ -74,4 +69,12 @@ h1, h2, h3, h4, h5, h6, ol, ul, li, a, p{
     color: #fff;
     font-size: 30px;
     border-radius: 100%;
+}
+
+.area .box .save {
+    position: absolute;
+    padding: 0px 5px;
+    margin: 5px;
+    bottom: 0;
+    right: 0;
 }

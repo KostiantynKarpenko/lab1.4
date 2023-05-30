@@ -1,12 +1,13 @@
 const $area = document.querySelector('.area');
+const $box = document.querySelector('.box');
 const $addBtn = document.querySelector('.btn');
-const $titleTextarea = document.querySelector('.title');
-const $messageTextarea = document.querySelector('.message');
-const $textarea = document.querySelector("textarea");
+const $delete = document.querySelector('.delete');
 
 let action = false;
 let $selectedBox = null;
 let selectedBoxIndex = null;
+let $selectedNote = null;
+let selectedNoteIndex = null;
 let boxes = [];
 
 const areaWidth = $area.offsetWidth;
@@ -24,23 +25,33 @@ let distance = {
     y: 0
 }
 
+if (!!getLS('coords')) {
+    boxes = getLS('coords');
+    boxGenerator(boxes);
+}
+
+function setLS(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getLS(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
+
 function boxGenerator(list) {
     let template = '';
     for(let i = 0; i < list.length; i++){
-        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="title" placeholder="Название" maxlength="32"></textarea><textarea class="message" id="myTextArea" placeholder="Введите текст заметки:" maxlength="120"></textarea></div>';
+        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" id="note"></textarea></div>';
     }
     $area.innerHTML = template;
     boxWidth = document.querySelector('.box').offsetWidth;
     boxHeight = document.querySelector('.box').offsetHeight;
 }
+
 function boxController(x, y) {
     $selectedBox.style.left = x + 'px';
     $selectedBox.style.top = y + 'px';
 }
-
-// $textarea.addEventListener("input")
-
-
 
 $area.addEventListener('mousedown', function(e) {
     if (e.target.classList.contains('box')) {
@@ -51,11 +62,14 @@ $area.addEventListener('mousedown', function(e) {
         startCoords.y = e.pageY;
     }
 });
+
 $area.addEventListener('mouseup', function(e) {
     action = false;
     boxes[selectedBoxIndex].x = distance.x;
     boxes[selectedBoxIndex].y = distance.y;
+    setLS('coords', boxes);
 });
+
 $area.addEventListener('mousemove', function(e) {
     if (action) {
         distance.x = boxes[selectedBoxIndex].x + (e.pageX - startCoords.x);
