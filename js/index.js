@@ -2,6 +2,7 @@ const $area = document.querySelector('.area');
 const $box = document.querySelector('.box');
 const $addBtn = document.querySelector('.btn');
 const $delete = document.querySelector('.delete');
+const $note = document.querySelector('.note')
 
 let action = false;
 let $selectedBox = null;
@@ -9,6 +10,7 @@ let selectedBoxIndex = null;
 let $selectedNote = null;
 let selectedNoteIndex = null;
 let boxes = [];
+let messages = [];
 
 const areaWidth = $area.offsetWidth;
 const areaHeight = $area.offsetHeight;
@@ -30,6 +32,10 @@ if (!!getLS('coords')) {
     boxGenerator(boxes);
 }
 
+if (!!getLS('messages')) {
+    messages = getLS('messages');
+}
+
 function setLS(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 }
@@ -41,7 +47,7 @@ function getLS(key) {
 function boxGenerator(list) {
     let template = '';
     for(let i = 0; i < list.length; i++){
-        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" id="note"></textarea></div>';
+        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="'+ i + '">' + messages[i] + '</textarea></div>';
     }
     $area.innerHTML = template;
     boxWidth = document.querySelector('.box').offsetWidth;
@@ -56,12 +62,23 @@ function boxController(x, y) {
 $area.addEventListener('mousedown', function(e) {
     if (e.target.classList.contains('box')) {
         action = true;
-        $selectedBox = e.target;
+        $selectedBox = e.target;   
         selectedBoxIndex = e.target.getAttribute('data-index');
         startCoords.x = e.pageX;
         startCoords.y = e.pageY;
     }
 });
+
+$area.addEventListener('click', function(e) {
+    if (e.target.classList.contains('note')) {
+        $selectedNote = e.target;
+        selectedNoteIndex = e.target.getAttribute('data-index');
+        value = $selectedNote.value;
+        messages[selectedNoteIndex] = value;
+        setLS('messages', messages);
+    }
+});
+
 
 $area.addEventListener('mouseup', function(e) {
     action = false;
@@ -91,3 +108,5 @@ $addBtn.addEventListener('click', function(e) {
     });
     boxGenerator(boxes);
 });
+
+console.log(messages[0])
