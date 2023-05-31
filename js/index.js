@@ -40,20 +40,27 @@ function getLS(key) {
     return JSON.parse(localStorage.getItem(key));
 }
 
+// ' + messages[i] + '
+
 function boxGenerator(list) {
     let template = '';
     for(let i = 0; i < list.length; i++){
-        if (!!getLS('messages')) {
-            messages = getLS('messages');
-        }
-        else {
-            messages[i] = '';
-        }
-        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="'+ i + '">' + messages[i] + '</textarea></div>';
+        // if (getLS('messages')) {
+        //     messages = getLS('messages');
+        // }
+        // else {
+        //     messages[i] = '';
+        //     messages[i+1] = '';
+        // }
+        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="'+ i + '"></textarea></div>';
     }
     $area.innerHTML = template;
     boxWidth = document.querySelector('.box').offsetWidth;
     boxHeight = document.querySelector('.box').offsetHeight;
+}
+
+if (!!getLS('messages')) {
+    fillTextarea();
 }
 
 function boxController(x, y) {
@@ -70,6 +77,20 @@ $area.addEventListener('mousedown', function(e) {
         startCoords.y = e.pageY;
     }
 });
+
+// function fillTextarea() { 
+//     const data = getLS('messages');
+//     data.forEach((element, index) => {
+//         document.querySelector(`textarea[data-index='${index}']`).value = element;
+//     });
+// }
+
+function fillTextarea() {
+    const data = getLS('messages');
+    for (let i = 0; i < data.length; i++) {
+        document.querySelector(`textarea[data-index='${i}']`).value = data[i];
+    }
+}
 
 $area.addEventListener('change', function(e) {
     if (e.target.classList.contains('note')) {
@@ -108,4 +129,7 @@ $addBtn.addEventListener('click', function(e) {
         y:0
     });
     boxGenerator(boxes);
+    if (!!getLS('messages')) {
+        fillTextarea();
+    }
 });
