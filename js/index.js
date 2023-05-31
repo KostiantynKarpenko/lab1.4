@@ -35,6 +35,9 @@ if (!!getLS('coords')) {
 if (!!getLS('messages')) {
     messages = getLS('messages');
 }
+else {
+    messages = ['']
+}
 
 function setLS(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
