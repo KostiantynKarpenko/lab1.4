@@ -32,13 +32,6 @@ if (!!getLS('coords')) {
     boxGenerator(boxes);
 }
 
-if (!!getLS('messages')) {
-    messages = getLS('messages');
-}
-else {
-    messages = ['']
-}
-
 function setLS(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 }
@@ -50,6 +43,12 @@ function getLS(key) {
 function boxGenerator(list) {
     let template = '';
     for(let i = 0; i < list.length; i++){
+        if (!!getLS('messages')) {
+            messages = getLS('messages');
+        }
+        else {
+            messages[i] = '';
+        }
         template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="'+ i + '">' + messages[i] + '</textarea></div>';
     }
     $area.innerHTML = template;
@@ -72,12 +71,11 @@ $area.addEventListener('mousedown', function(e) {
     }
 });
 
-$area.addEventListener('click', function(e) {
+$area.addEventListener('change', function(e) {
     if (e.target.classList.contains('note')) {
-        $selectedNote = e.target;
+        value = getLS('messages')
         selectedNoteIndex = e.target.getAttribute('data-index');
-        value = $selectedNote.value;
-        messages[selectedNoteIndex] = value;
+        messages[selectedNoteIndex] = e.target.value;
         setLS('messages', messages);
     }
 });
@@ -111,5 +109,3 @@ $addBtn.addEventListener('click', function(e) {
     });
     boxGenerator(boxes);
 });
-
-console.log(messages[0])
