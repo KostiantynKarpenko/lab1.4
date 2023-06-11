@@ -1,16 +1,14 @@
 const $area = document.querySelector('.area');
-const $box = document.querySelector('.box');
+const $box = document.querySelector('.area .box');
 const $addBtn = document.querySelector('.btn');
 const $delete = document.querySelector('.delete');
-const $note = document.querySelector('.note')
+const $note = document.querySelector('.note');
+const $nig = document.getElementById('nig');
 
 let action = false;
 let $selectedBox = null;
 let selectedBoxIndex = null;
-let $selectedNote = null;
-let selectedNoteIndex = null;
 let boxes = [];
-let messages = [];
 
 const areaWidth = $area.offsetWidth;
 const areaHeight = $area.offsetHeight;
@@ -19,16 +17,16 @@ let boxHeight = 0;
 
 let startCoords = {
     x: 0,
-    y: 0
+    y: 0,
 }
 
 let distance = {
     x: 0,
-    y: 0
+    y: 0,
 }
 
-if (!!getLS('coords')) {
-    boxes = getLS('coords');
+if (!!getLS('boxes')) {
+    boxes = getLS('boxes');
     boxGenerator(boxes);
 }
 
@@ -43,13 +41,7 @@ function getLS(key) {
 function boxGenerator(list) {
     let template = '';
     for(let i = 0; i < list.length; i++){
-        if (!!getLS('messages')) {
-            messages = getLS('messages');
-        }
-        else {
-            messages[i] = '';
-        }
-        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="'+ i + '">' + messages[i] + '</textarea></div>';
+        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><img src="img/cross.svg" class="delete" data-index="' + i + '"><textarea class="note" placeholder="Введите текст заметки:" maxlength="120" data-index="' + i + '">' + list[i].message + '</textarea></div>';
     }
     $area.innerHTML = template;
     boxWidth = document.querySelector('.box').offsetWidth;
@@ -71,21 +63,11 @@ $area.addEventListener('mousedown', function(e) {
     }
 });
 
-$area.addEventListener('change', function(e) {
-    if (e.target.classList.contains('note')) {
-        value = getLS('messages')
-        selectedNoteIndex = e.target.getAttribute('data-index');
-        messages[selectedNoteIndex] = e.target.value;
-        setLS('messages', messages);
-    }
-});
-
-
 $area.addEventListener('mouseup', function(e) {
     action = false;
     boxes[selectedBoxIndex].x = distance.x;
     boxes[selectedBoxIndex].y = distance.y;
-    setLS('coords', boxes);
+    setLS('boxes', boxes);
 });
 
 $area.addEventListener('mousemove', function(e) {
@@ -105,7 +87,16 @@ $area.addEventListener('mousemove', function(e) {
 $addBtn.addEventListener('click', function(e) {
     boxes.push({
         x:0,
-        y:0
+        y:0,
+        message: ''
     });
     boxGenerator(boxes);
+});
+
+$area.addEventListener('input', function(e) {
+    if (e.target.classList.contains('note')) {
+        selectedBoxIndex = e.target.getAttribute('data-index');
+        boxes[selectedBoxIndex].message = e.target.value;
+        setLS('boxes', boxes);
+    }
 });
