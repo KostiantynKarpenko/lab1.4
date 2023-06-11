@@ -3,7 +3,6 @@ const $box = document.querySelector('.area .box');
 const $addBtn = document.querySelector('.btn');
 const $delete = document.querySelector('.delete');
 const $note = document.querySelector('.note');
-const $nig = document.getElementById('nig');
 
 let action = false;
 let $selectedBox = null;
